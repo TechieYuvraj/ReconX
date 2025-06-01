@@ -1,3 +1,8 @@
 requests
 beautifulsoup4
 fpdf
+fastapi
+uvicorn
+pydantic
+python-multipart
+aiofiles
