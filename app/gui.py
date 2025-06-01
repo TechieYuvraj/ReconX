@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-from reconx import main as run_reconx
+from app.reconx import main as run_reconx
 import sys, threading
 
 class ReconXGUI:
