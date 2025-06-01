@@ -1,4 +1,3 @@
-# app/core/reconx_runner.py
 import os
 from app.utils.file_manager import save_status
 from reconx import main as reconx_main

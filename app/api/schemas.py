@@ -1,5 +1,3 @@
-# app/api/schemas.py
-
 from pydantic import BaseModel, HttpUrl
 
 class CrawlOptions(BaseModel):

@@ -11,6 +11,10 @@ from utils.screenshotter import take_screenshot
 from utils.links import extract_links
 from utils.report_generator import ReportGenerator
 import requests
+from fastapi.responses import FileResponse
+import os
+from uuid import uuid4
+from fastapi import HTTPException
 
 router = APIRouter()
 
@@ -39,7 +43,6 @@ def crawl_site(options: CrawlOptions):
 
     visited_urls = crawler.start_crawling(options.url, session, extract_links)
 
-    report_path = None
     if options.enable_pdf_report:
         report = ReportGenerator(
             target_url=options.url,
@@ -49,15 +52,23 @@ def crawl_site(options: CrawlOptions):
                 "Forms": options.enable_forms,
                 "Screenshots": options.enable_screenshots
             },
-            screenshots=[]  # Can update with screenshot paths later
+            screenshots=[]
         )
-        report_path = report.generate_pdf()
+        report_path = report.generate_pdf()  # ← Now gets the actual path
+
+        if not os.path.isfile(report_path):
+            raise HTTPException(status_code=500, detail="Report generation failed.")
+
+        return FileResponse(
+            path=report_path,
+            filename=os.path.basename(report_path),
+            media_type="application/pdf"
+        )
 
     return {
         "message": "Crawl completed",
         "total_urls": len(visited_urls),
-        "report_generated": bool(report_path),
-        "report_path": report_path
+        "report_generated": False
     }
 
 @router.post("/dirsearch")

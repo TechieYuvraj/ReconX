@@ -13,7 +13,7 @@ def extract_links(html, base_url):
         if "nofollow" in rel:
             continue
 
-        full_url = urljoin(base_url, href)
+        full_url = urljoin(str(base_url), str(href))
         parsed = urlparse(full_url)
 
         if parsed.scheme in ["http", "https"]:
