@@ -1,42 +1,78 @@
-# app/api/routes.py
-from fastapi import APIRouter, BackgroundTasks, HTTPException
-from pydantic import BaseModel
-from uuid import uuid4
-from app.core.reconx_runner import run_reconx_scan
-import os
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, HttpUrl
+from integrations.dirsearch_runner import run_dirsearch
+from integrations.sublist3r_runner import run_sublist3r
+from urllib.parse import urlparse
+from app.api.schemas import CrawlOptions
+from core.parallel_crawler import ParallelCrawler
+from utils.forms import scan_for_forms
+from utils.keywords import scan_for_keywords
+from utils.screenshotter import take_screenshot
+from utils.links import extract_links
+from utils.report_generator import ReportGenerator
+import requests
 
 router = APIRouter()
 
-class ScanRequest(BaseModel):
-    url: str
-    keywords: bool = False
-    forms: bool = False
-    export: bool = False
-    nofollow: bool = False
-    robots: bool = False
-    dirsearch: bool = False
-    sublist3r: bool = False
-    screenshots: bool = False
-    report: bool = False
-    threads: int = 10
+class URLRequest(BaseModel):
+    url: HttpUrl
 
-@router.post("/scan")
-def start_scan(data: ScanRequest, background_tasks: BackgroundTasks):
-    scan_id = str(uuid4())
-    background_tasks.add_task(run_reconx_scan, scan_id, data)
-    return {"status": "queued", "scan_id": scan_id}
+@router.get("/")
+def root():
+    return {"message": "ReconX API is live!"}
 
-@router.get("/status/{scan_id}")
-def get_status(scan_id: str):
-    status_file = f"output/{scan_id}/status.txt"
-    if not os.path.exists(status_file):
-        raise HTTPException(status_code=404, detail="Scan not found")
-    with open(status_file) as f:
-        return {"scan_id": scan_id, "status": f.read().strip()}
+@router.get("/ping")
+def ping():
+    return {"status": "ok"}
 
-@router.get("/report/{scan_id}")
-def download_report(scan_id: str):
-    file_path = f"output/{scan_id}/report.pdf"
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="Report not found")
-    return FileResponse(path=file_path, filename="report.pdf", media_type="application/pdf")
+@router.post("/crawl")
+def crawl_site(options: CrawlOptions):
+    session = requests.Session()
+
+    crawler = ParallelCrawler(
+        max_workers=10,
+        screenshot_callback=take_screenshot if options.enable_screenshots else None,
+        form_scanner=scan_for_forms if options.enable_forms else None,
+        keyword_scanner=scan_for_keywords if options.enable_keywords else None,
+        respect_nofollow=False
+    )
+
+    visited_urls = crawler.start_crawling(options.url, session, extract_links)
+
+    report_path = None
+    if options.enable_pdf_report:
+        report = ReportGenerator(
+            target_url=options.url,
+            visited_urls=visited_urls,
+            scan_settings={
+                "Keywords": options.enable_keywords,
+                "Forms": options.enable_forms,
+                "Screenshots": options.enable_screenshots
+            },
+            screenshots=[]  # Can update with screenshot paths later
+        )
+        report_path = report.generate_pdf()
+
+    return {
+        "message": "Crawl completed",
+        "total_urls": len(visited_urls),
+        "report_generated": bool(report_path),
+        "report_path": report_path
+    }
+
+@router.post("/dirsearch")
+def dirsearch_route(request: URLRequest):
+    try:
+        result = run_dirsearch(request.url)
+        return {"success": True, "output": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/sublist3r")
+def sublist3r_route(request: URLRequest):
+    try:
+        domain = urlparse(request.url).netloc
+        result = run_sublist3r(domain)
+        return {"success": True, "output": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
