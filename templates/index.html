@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ReconX - Web Recon Tool</title>
+  <link rel="stylesheet" href="/frontend/style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>🔍 ReconX</h1>
+    <form id="reconForm">
+      <label for="target_url">Target URL:</label>
+      <input type="url" id="target_url" name="target_url" placeholder="https://example.com" required>
+
+      <div class="options">
+        <label><input type="checkbox" id="form_detection"> Enable Form Detection</label>
+        <label><input type="checkbox" id="subdomain_enum"> Enable Subdomain Enumeration</label>
+        <label><input type="checkbox" id="dirsearch"> Enable DirSearch</label>
+      </div>
+
+      <button type="submit">Start Scan</button>
+    </form>
+
+    <div id="result">
+      <h2>Scan Results</h2>
+      <pre id="output">Waiting for scan...</pre>
+    </div>
+  </div>
+
+  <script src="/frontend/script.js"></script>
+</body>
+</html>

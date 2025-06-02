@@ -15,6 +15,7 @@ from fastapi.responses import FileResponse
 import os
 from uuid import uuid4
 from fastapi import HTTPException
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 
@@ -54,22 +55,31 @@ def crawl_site(options: CrawlOptions):
             },
             screenshots=[]
         )
-        report_path = report.generate_pdf()  # ← Now gets the actual path
+        report_path = report.generate_pdf()
 
         if not os.path.isfile(report_path):
             raise HTTPException(status_code=500, detail="Report generation failed.")
 
-        return FileResponse(
-            path=report_path,
-            filename=os.path.basename(report_path),
-            media_type="application/pdf"
-        )
+        # Return the URL to download the PDF
+        return {
+            "message": "Crawl completed",
+            "total_urls": len(visited_urls),
+            "report_generated": True,
+            "report_url": f"/reports/{os.path.basename(report_path)}"
+        }
 
     return {
         "message": "Crawl completed",
         "total_urls": len(visited_urls),
         "report_generated": False
     }
+
+@router.get("/reports/{filename}")
+def download_report(filename: str):
+    path = os.path.join("reports", filename)
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(path, media_type="application/pdf", filename=filename)
 
 @router.post("/dirsearch")
 def dirsearch_route(request: URLRequest):
