@@ -37,6 +37,20 @@ class ReportGenerator:
         else:
             pdf.cell(0, 6, "None", ln=True)
 
+        # Add detailed feature results
+        if self.found_keywords:
+            pdf.set_font("Arial", "B", 14)
+            pdf.cell(0, 10, "Keywords Found:", ln=True)
+            pdf.set_font("Arial", "", 11)
+            for keyword in self.found_keywords:
+                pdf.cell(0, 6, f"- {keyword}", ln=True)
+
+        if self.found_forms:
+            pdf.set_font("Arial", "B", 14)
+            pdf.cell(0, 10, "Forms Detected:", ln=True)
+            pdf.set_font("Arial", "", 11)
+            for form in self.found_forms:
+                pdf.cell(0, 6, f"- {form}", ln=True)
 
         pdf.set_font("Arial", "B", 14)
         pdf.cell(0, 10, "Crawled URLs:", ln=True)

@@ -12,6 +12,9 @@ class ParallelCrawler:
         self.form_scanner = form_scanner
         self.keyword_scanner = keyword_scanner
         self.respect_nofollow = respect_nofollow
+        self.found_keywords = set()
+        self.found_forms = []
+        self.screenshots = []
 
     def crawl_url(self, url, session, extract_links_fn):
         try:
@@ -21,15 +24,21 @@ class ParallelCrawler:
 
             # Optional: Keyword scanner
             if self.keyword_scanner:
-                self.keyword_scanner(url, html)
+                keywords = self.keyword_scanner(url, html)
+                if keywords:
+                    self.found_keywords.update(keywords)
 
             # Optional: Form scanner
             if self.form_scanner:
-                self.form_scanner(url, html)
+                forms = self.form_scanner(url, html)
+                if forms:
+                    self.found_forms.extend(forms)
 
             # Optional: Screenshot
             if self.screenshot_callback:
-                self.screenshot_callback(url)
+                screenshot_path = self.screenshot_callback(url)
+                if screenshot_path:
+                    self.screenshots.append(screenshot_path)
 
             # Extract and return links
             return extract_links_fn(html, url)
@@ -64,4 +73,9 @@ class ParallelCrawler:
                     except Exception as e:
                         print(f"[!] Error processing result from {url}: {e}")
 
-        return self.visited_urls
+        return {
+            "visited_urls": self.visited_urls,
+            "found_keywords": list(self.found_keywords),
+            "found_forms": self.found_forms,
+            "screenshots": self.screenshots
+        }

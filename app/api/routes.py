@@ -42,19 +42,19 @@ def crawl_site(options: CrawlOptions):
         respect_nofollow=False
     )
 
-    visited_urls = crawler.start_crawling(options.url, session, extract_links)
+    crawl_results = crawler.start_crawling(options.url, session, extract_links)
 
     if options.enable_pdf_report:
         report = ReportGenerator(
             target_url=options.url,
-            visited_urls=visited_urls,
+            visited_urls=crawl_results["visited_urls"],
             scan_settings={
                 "keywords": options.enable_keywords,
                 "form_detection": options.enable_forms,
                 "screenshots": options.enable_screenshots,
                 "dirsearch": False  # Since dirsearch is disabled due to missing integration
             },
-            screenshots=[]
+            screenshots=crawl_results["screenshots"]
         )
         report_path = report.generate_pdf()
 
@@ -64,14 +64,14 @@ def crawl_site(options: CrawlOptions):
         # Return the URL to download the PDF
         return {
             "message": "Crawl completed",
-            "total_urls": len(visited_urls),
+            "total_urls": len(crawl_results["visited_urls"]),
             "report_generated": True,
             "report_url": f"/reports/{os.path.basename(report_path)}"
         }
 
     return {
         "message": "Crawl completed",
-        "total_urls": len(visited_urls),
+        "total_urls": len(crawl_results["visited_urls"]),
         "report_generated": False
     }
 
