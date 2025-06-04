@@ -5,19 +5,20 @@ document.getElementById("scanForm").addEventListener("submit", function (e) {
   const enableForms = document.getElementById("forms").checked;
   const enableSubdomains = document.getElementById("subdomains").checked;
   const enableDirsearch = document.getElementById("dirsearch").checked;
+  const enableScreenshots = document.getElementById("screenshots").checked;
 
   const requestBody = {
     url: url,
     enable_forms: enableForms,
-    enable_keywords: false,
-    enable_screenshots: false,
+    enable_keywords: enableSubdomains,
+    enable_screenshots: enableScreenshots,
     enable_pdf_report: true
   };
 
   const output = document.getElementById("output");
   output.innerHTML = `<span style="color: #aaa;">⏳ Waiting for scan...</span>`;
 
-  fetch("http://localhost:8000/crawl", {
+  fetch("/api/crawl", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(requestBody)
@@ -32,7 +33,7 @@ document.getElementById("scanForm").addEventListener("submit", function (e) {
         let resultText = `✅ ${data.message}<br>🔗 URLs Found: ${data.total_urls}<br>`;
 
         if (data.report_generated && data.report_url) {
-          const fullUrl = `http://localhost:5500${data.report_url}`;
+          const fullUrl = data.report_url;
           resultText += `📄 <a href="${fullUrl}" target="_blank" style="color:#4fd1c5;">Download Report</a>`;
         }
 

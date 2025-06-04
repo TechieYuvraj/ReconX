@@ -4,22 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ReconX - Web Recon Tool</title>
-  <link rel="stylesheet" href="/frontend/style.css" />
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <div class="container">
     <h1>🔍 ReconX</h1>
-    <form id="reconForm">
+    <form id="scanForm">
       <label for="target_url">Target URL:</label>
-      <input type="url" id="target_url" name="target_url" placeholder="https://example.com" required>
+      <input type="url" id="url" name="url" placeholder="https://example.com" required>
 
       <div class="options">
-        <label><input type="checkbox" id="form_detection"> Enable Form Detection</label>
-        <label><input type="checkbox" id="subdomain_enum"> Enable Subdomain Enumeration</label>
+        <label><input type="checkbox" id="forms"> Enable Form Detection</label>
+        <label><input type="checkbox" id="subdomains"> Enable Subdomain Enumeration</label>
         <label><input type="checkbox" id="dirsearch"> Enable DirSearch</label>
+        <label><input type="checkbox" id="screenshots"> Enable Screenshots</label>
       </div>
 
-      <button type="submit">Start Scan</button>
+      <button type="submit" id="startScanBtn">Start Scan</button>
     </form>
 
     <div id="result">
@@ -28,6 +29,6 @@
     </div>
   </div>
 
-  <script src="/frontend/script.js"></script>
+  <script src="/static/script.js"></script>
 </body>
 </html>

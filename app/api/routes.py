@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, HttpUrl
-from integrations.dirsearch_runner import run_dirsearch
-from integrations.sublist3r_runner import run_sublist3r
+#from integrations.dirsearch_runner import run_dirsearch
+#from integrations.sublist3r_runner import run_sublist3r
 from urllib.parse import urlparse
 from app.api.schemas import CrawlOptions
 from core.parallel_crawler import ParallelCrawler
@@ -49,9 +49,10 @@ def crawl_site(options: CrawlOptions):
             target_url=options.url,
             visited_urls=visited_urls,
             scan_settings={
-                "Keywords": options.enable_keywords,
-                "Forms": options.enable_forms,
-                "Screenshots": options.enable_screenshots
+                "keywords": options.enable_keywords,
+                "form_detection": options.enable_forms,
+                "screenshots": options.enable_screenshots,
+                "dirsearch": False  # Since dirsearch is disabled due to missing integration
             },
             screenshots=[]
         )
@@ -81,19 +82,19 @@ def download_report(filename: str):
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(path, media_type="application/pdf", filename=filename)
 
-@router.post("/dirsearch")
-def dirsearch_route(request: URLRequest):
-    try:
-        result = run_dirsearch(request.url)
-        return {"success": True, "output": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# @router.post("/dirsearch")
+# def dirsearch_route(request: URLRequest):
+#     try:
+#         result = run_dirsearch(request.url)
+#         return {"success": True, "output": result}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
 
-@router.post("/sublist3r")
-def sublist3r_route(request: URLRequest):
-    try:
-        domain = urlparse(request.url).netloc
-        result = run_sublist3r(domain)
-        return {"success": True, "output": result}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+# @router.post("/sublist3r")
+# def sublist3r_route(request: URLRequest):
+#     try:
+#         domain = urlparse(request.url).netloc
+#         result = run_sublist3r(domain)
+#         return {"success": True, "output": result}
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
