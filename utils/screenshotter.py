@@ -23,5 +23,7 @@ def take_screenshot(url, output_dir="screenshots"):
         driver.save_screenshot(filepath)
         print(f"[✓] Screenshot saved: {filepath}")
         driver.quit()
+        return filepath
     except Exception as e:
         print(f"[!] Screenshot failed for {url}: {e}")
+        return None

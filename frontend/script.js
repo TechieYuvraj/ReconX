@@ -2,6 +2,7 @@ document.getElementById("scanForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const url = document.getElementById("url").value;
+  const enableKeywords = document.getElementById("keywords").checked;
   const enableForms = document.getElementById("forms").checked;
   const enableSubdomains = document.getElementById("subdomains").checked;
   const enableDirsearch = document.getElementById("dirsearch").checked;
@@ -10,10 +11,14 @@ document.getElementById("scanForm").addEventListener("submit", function (e) {
   const requestBody = {
     url: url,
     enable_forms: enableForms,
-    enable_keywords: enableSubdomains,
+    enable_keywords: enableKeywords,
+    enable_subdomains: enableSubdomains,
+    enable_dirsearch: enableDirsearch,
     enable_screenshots: enableScreenshots,
     enable_pdf_report: true
   };
+
+  console.log("Request body to be sent:", requestBody);
 
   const output = document.getElementById("output");
   output.innerHTML = `<span style="color: #aaa;">⏳ Waiting for scan...</span>`;

@@ -6,3 +6,5 @@ class CrawlOptions(BaseModel):
     enable_forms: bool = False
     enable_screenshots: bool = False
     enable_pdf_report: bool = False
+    enable_dirsearch: bool = False
+    enable_subdomains: bool = False

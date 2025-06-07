@@ -12,7 +12,7 @@ class ParallelCrawler:
         self.form_scanner = form_scanner
         self.keyword_scanner = keyword_scanner
         self.respect_nofollow = respect_nofollow
-        self.found_keywords = set()
+        self.found_keywords = []
         self.found_forms = []
         self.screenshots = []
 
@@ -26,7 +26,7 @@ class ParallelCrawler:
             if self.keyword_scanner:
                 keywords = self.keyword_scanner(url, html)
                 if keywords:
-                    self.found_keywords.update(keywords)
+                    self.found_keywords.extend(keywords)
 
             # Optional: Form scanner
             if self.form_scanner:
@@ -36,7 +36,7 @@ class ParallelCrawler:
 
             # Optional: Screenshot
             if self.screenshot_callback:
-                screenshot_path = self.screenshot_callback(url)
+                screenshot_path = self.screenshot_callback(str(url))
                 if screenshot_path:
                     self.screenshots.append(screenshot_path)
 
