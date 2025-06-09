@@ -80,6 +80,6 @@ This project is licensed under the terms specified in the LICENSE file.
 
 ## Support
 
-Feel free to open an issue if you encounter any problems or have questions. I'll do my best.
-Contact the developer at https://yuvraj.rtunotes.in
-Developer's Portfolio https://dev.rtunotes.in
+- Feel free to open an issue if you encounter any problems or have questions. I'll do my best.
+- Contact the developer at https://yuvraj.rtunotes.in
+- Developer's Portfolio https://dev.rtunotes.in
