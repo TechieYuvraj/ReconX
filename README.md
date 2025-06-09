@@ -31,9 +31,55 @@ ReconX is an ethical hacking web reconnaissance tool designed to perform compreh
 - `reports/`: Generated PDF reports.
 - `screenshots/`: Captured screenshots during scans.
 
-## Installation
+## Installation and Setup
 
-Please refer to `requirements.txt` files in the root and subdirectories for dependencies.
+1. Clone the repository:
+   ```
+   git clone https://github.com/TechieYuvraj/ReconX
+   cd ReconX
+   ```
+
+2. Create and activate a Python virtual environment (optional but recommended):
+   ```
+   python -m venv venv
+   # On Windows
+   venv\Scripts\activate
+   # On Unix or MacOS
+   source venv/bin/activate
+   ```
+
+3. Install the required dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+4. For submodules like `dirsearch` and `sublist3r`, install their dependencies:
+   ```
+   pip install -r dirsearch/requirements.txt
+   pip install -r sublist3r/requirements.txt
+   ```
+
+5. To run the web API server:
+   ```
+   uvicorn app.main:app --reload
+   ```
+
+6. To launch the GUI:
+   ```
+   python gui.py
+   ```
+
+7. To run scans via CLI:
+   ```
+   python reconx.py -u <target_url> [options]
+   ```
+
+## License
+
+This project is licensed under the terms specified in the LICENSE file.
+   python gui.py
+   pip install -r requirements.txt
+   cd ReconX
 
 ## License
 
