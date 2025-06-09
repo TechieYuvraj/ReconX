@@ -77,11 +77,9 @@ ReconX is an ethical hacking web reconnaissance tool designed to perform compreh
 ## License
 
 This project is licensed under the terms specified in the LICENSE file.
-   python gui.py
-   pip install -r requirements.txt
-   cd ReconX
 
-## License
+## Support
 
-This project is licensed under the terms specified in the LICENSE file.
-
+Feel free to open an issue if you encounter any problems or have questions. I'll do my best.
+Contact the developer at https://yuvraj.rtunotes.in
+Developer's Portfolio https://dev.rtunotes.in
