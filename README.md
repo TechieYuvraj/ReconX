@@ -14,6 +14,19 @@ ReconX is an ethical hacking web reconnaissance tool designed to perform compreh
 - Web API for programmatic access and automation.
 - User-friendly GUI for easy scan configuration and execution.
 
+## Upcomming Features
+- Integration with Vunerability Scanners.
+- Integration with Phishing Scanners.
+- Integration with XSS Scanners.
+- Integration with SQL Injection Scanners.
+- Integration with Network Scanners.
+- Integration with OSINT Tools.
+- Enhanced reporting capabilities.
+- Support for additional web crawling protocols.
+- Improved performance and scalability.
+- Enhanced user interface and user experience.
+- Integration with other security tools.
+
 ## Usage
 
 - CLI: Run `reconx.py` with appropriate flags to start scans.
