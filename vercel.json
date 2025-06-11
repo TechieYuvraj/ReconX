@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "app/main.py"
     }
-  ],
-  "hooks": {
-    "build": "git submodule update --init --recursive"
-  }
+  ]
 }
