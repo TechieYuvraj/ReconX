@@ -22,8 +22,12 @@ app.add_middleware(
 # Serve static files (CSS, JS)
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
-# Serve reports directory as static files
-app.mount("/reports", StaticFiles(directory="reports"), name="reports")
+import os
+from fastapi.staticfiles import StaticFiles
+
+# Serve reports directory as static files if it exists
+if os.path.isdir("reports"):
+    app.mount("/reports", StaticFiles(directory="reports"), name="reports")
 
 # Serve frontend directory for static assets
 if os.path.isdir("frontend"):
