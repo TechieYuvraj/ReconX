@@ -9,7 +9,6 @@ ReconX is an ethical hacking web reconnaissance tool designed to perform compreh
 - Respect for robots.txt and rel="nofollow" directives.
 - Integration with Dirsearch for directory brute forcing.
 - Integration with Sublist3r for subdomain enumeration.
-- Screenshot capture of crawled pages.
 - Generation of detailed PDF reports summarizing scan results.
 - Web API for programmatic access and automation.
 - User-friendly GUI for easy scan configuration and execution.
@@ -21,6 +20,7 @@ ReconX is an ethical hacking web reconnaissance tool designed to perform compreh
 - Integration with SQL Injection Scanners.
 - Integration with Network Scanners.
 - Integration with OSINT Tools.
+- Screenshot capture of crawled pages.
 - Enhanced reporting capabilities.
 - Support for additional web crawling protocols.
 - Improved performance and scalability.
