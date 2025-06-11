@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router as api_router
+import os
 
 app = FastAPI()
 app.title = "ReconX Web API"
@@ -23,6 +24,10 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # Serve reports directory as static files
 app.mount("/reports", StaticFiles(directory="reports"), name="reports")
+
+# Serve frontend directory for static assets
+if os.path.isdir("frontend"):
+    app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
 
 # Include API router with prefix /api
 app.include_router(api_router, prefix="/api")
