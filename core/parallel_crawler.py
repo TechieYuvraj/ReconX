@@ -20,6 +20,13 @@ class ParallelCrawler:
         try:
             print(f"[+] Crawling: {url}")
             response = session.get(url, timeout=10, headers={"User-Agent": "ReconX-Bot"})
+
+            # Skip non-HTML content
+            content_type = response.headers.get('Content-Type', '')
+            if 'text/html' not in content_type:
+                print(f"[!] Skipping non-HTML content at {url} with Content-Type: {content_type}")
+                return []
+
             html = response.text
 
             # Optional: Keyword scanner
