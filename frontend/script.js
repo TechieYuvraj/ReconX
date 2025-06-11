@@ -10,12 +10,12 @@ document.getElementById("scanForm").addEventListener("submit", function (e) {
 
   const requestBody = {
     url: url,
-    enableForms: enableForms,
-    enableKeywords: enableKeywords,
-    enableSubdomains: enableSubdomains,
-    enableDirsearch: enableDirsearch,
-    enableScreenshots: enableScreenshots,
-    enablePdfReport: true
+    enable_forms: enableForms,
+    enable_keywords: enableKeywords,
+    enable_subdomains: enableSubdomains,
+    enable_dirsearch: enableDirsearch,
+    enable_screenshots: enableScreenshots,
+    enable_pdf_report: true
   };
 
   console.log("Request body to be sent:", requestBody);
