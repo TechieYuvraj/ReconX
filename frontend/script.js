@@ -21,7 +21,7 @@ document.getElementById("scanForm").addEventListener("submit", function (e) {
   console.log("Request body to be sent:", requestBody);
 
   const output = document.getElementById("output");
-  output.innerHTML = `<span style="color: #aaa;">⏳ Waiting for scan...</span>`;
+  output.innerHTML = `<span style="color: #aaa;">⏳ The scan is being processed please wait...</span>`;
 
   fetch("/api/crawl", {
     method: "POST",

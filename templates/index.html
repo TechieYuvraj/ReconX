@@ -4,15 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ReconX - Web Recon Tool</title>
+  <meta name="description" content="ReconX is a web reconnaissance tool for scanning websites for vulnerabilities, keywords, forms, subdomains, directories, and screenshots." />
+  <meta name="keywords" content="web reconnaissance, vulnerability scanning, keyword scanning, form detection, subdomain enumeration, directory search, screenshots" />
+  <meta name="author" content="ReconX Team" />
+  <link rel="icon" href="../frontend/Owner.ico" type="image/x-icon" />
+  <meta property="og:title" content="ReconX - Web Recon Tool" />
+  <meta property="og:description" content="ReconX is a web reconnaissance tool for scanning websites for vulnerabilities, keywords, forms, subdomains, directories, and screenshots." />
+  <meta property="og:image" content="../frontend/owner.png" />
+  <meta property="og:url" content="https://reconx.cyberguardians.tech" />
+  <meta property="og:type" content="website" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <div class="container">
     <h1>🔍 ReconX</h1>
+    <p>- Welcome to ReconX, your go-to tool for web reconnaissance. Enter a target URL and select the options you want to enable for scanning.</p>
+    <p>- ReconX is designed to help security professionals and enthusiasts identify potential vulnerabilities and gather information about web applications.</p>
+    <p>- Please use on the website you own or have permission to test. Unauthorized scanning may violate terms of service or legal regulations.</p>
     <form id="scanForm">
       <label for="target_url">Target URL:</label>
       <input type="url" id="url" name="url" placeholder="https://example.com" required>
 
+      <label for="scan_type">Scan Type:</label>
       <div class="options">
         <label><input type="checkbox" id="keywords"> Enable Keyword Scanning</label>
         <label><input type="checkbox" id="forms"> Enable Form Detection</label>
@@ -26,7 +39,7 @@
 
     <div id="result">
       <h2>Scan Results</h2>
-      <pre id="output">Waiting for scan...</pre>
+      <pre id="output">Waiting to enter URL and start scanning...</pre>
     </div>
   </div>
 
