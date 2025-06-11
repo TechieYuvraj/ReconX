@@ -25,9 +25,9 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 import os
 from fastapi.staticfiles import StaticFiles
 
-# Serve reports directory as static files if it exists
-if os.path.isdir("reports"):
-    app.mount("/reports", StaticFiles(directory="reports"), name="reports")
+# Ensure reports directory exists and serve as static files
+os.makedirs("reports", exist_ok=True)
+app.mount("/reports", StaticFiles(directory="reports"), name="reports")
 
 # Serve frontend directory for static assets
 if os.path.isdir("frontend"):
