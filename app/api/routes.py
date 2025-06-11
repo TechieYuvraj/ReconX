@@ -32,68 +32,71 @@ def ping():
 
 @router.post("/crawl")
 def crawl_site(options: CrawlOptions):
-    session = requests.Session()
+    try:
+        session = requests.Session()
 
-    crawler = ParallelCrawler(
-        max_workers=10,
-        screenshot_callback=take_screenshot if options.enable_screenshots else None,
-        form_scanner=scan_for_forms if options.enable_forms else None,
-        keyword_scanner=scan_for_keywords if options.enable_keywords else None,
-        respect_nofollow=False
-    )
-
-    crawl_results = crawler.start_crawling(options.url, session, extract_links)
-
-    dirsearch_results = None
-    if options.enable_dirsearch:
-        dirsearch_results = run_dirsearch(options.url)
-
-    sublist3r_results = None
-    if options.enable_subdomains:
-        domain = urlparse(str(options.url)).netloc
-        sublist3r_results = run_sublist3r(domain)
-
-    scan_settings = {
-        "keywords": options.enable_keywords,
-        "form_detection": options.enable_forms,
-        "dirsearch": options.enable_dirsearch,
-        "subdomains": options.enable_subdomains,
-        "screenshots": options.enable_screenshots
-    }
-
-    if options.enable_pdf_report:
-        report = ReportGenerator(
-            target_url=options.url,
-            visited_urls=crawl_results["visited_urls"],
-            scan_settings=scan_settings,
-            screenshots=crawl_results.get("screenshots", []),
-            found_keywords=crawl_results.get("found_keywords", []),
-            found_forms=crawl_results.get("found_forms", []),
-            dirsearch_results=dirsearch_results,
-            sublist3r_results=sublist3r_results
+        crawler = ParallelCrawler(
+            max_workers=10,
+            screenshot_callback=take_screenshot if options.enable_screenshots else None,
+            form_scanner=scan_for_forms if options.enable_forms else None,
+            keyword_scanner=scan_for_keywords if options.enable_keywords else None,
+            respect_nofollow=False
         )
-        report_path = report.generate_pdf()
 
-        if not os.path.isfile(report_path):
-            raise HTTPException(status_code=500, detail="Report generation failed.")
+        crawl_results = crawler.start_crawling(options.url, session, extract_links)
 
-        # Return the URL to download the PDF
+        dirsearch_results = None
+        if options.enable_dirsearch:
+            dirsearch_results = run_dirsearch(options.url)
+
+        sublist3r_results = None
+        if options.enable_subdomains:
+            domain = urlparse(str(options.url)).netloc
+            sublist3r_results = run_sublist3r(domain)
+
+        scan_settings = {
+            "keywords": options.enable_keywords,
+            "form_detection": options.enable_forms,
+            "dirsearch": options.enable_dirsearch,
+            "subdomains": options.enable_subdomains,
+            "screenshots": options.enable_screenshots
+        }
+
+        if options.enable_pdf_report:
+            report = ReportGenerator(
+                target_url=options.url,
+                visited_urls=crawl_results["visited_urls"],
+                scan_settings=scan_settings,
+                screenshots=crawl_results.get("screenshots", []),
+                found_keywords=crawl_results.get("found_keywords", []),
+                found_forms=crawl_results.get("found_forms", []),
+                dirsearch_results=dirsearch_results,
+                sublist3r_results=sublist3r_results
+            )
+            report_path = report.generate_pdf()
+
+            if not os.path.isfile(report_path):
+                raise HTTPException(status_code=500, detail="Report generation failed.")
+
+            # Return the URL to download the PDF
+            return {
+                "message": "Crawl completed",
+                "total_urls": len(crawl_results["visited_urls"]),
+                "report_generated": True,
+                "report_url": f"/reports/{os.path.basename(report_path)}",
+                "dirsearch_results": dirsearch_results,
+                "sublist3r_results": sublist3r_results
+            }
+
         return {
             "message": "Crawl completed",
             "total_urls": len(crawl_results["visited_urls"]),
-            "report_generated": True,
-            "report_url": f"/reports/{os.path.basename(report_path)}",
+            "report_generated": False,
             "dirsearch_results": dirsearch_results,
             "sublist3r_results": sublist3r_results
         }
-
-    return {
-        "message": "Crawl completed",
-        "total_urls": len(crawl_results["visited_urls"]),
-        "report_generated": False,
-        "dirsearch_results": dirsearch_results,
-        "sublist3r_results": sublist3r_results
-    }
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 @router.get("/reports/{filename}")
 def download_report(filename: str):
