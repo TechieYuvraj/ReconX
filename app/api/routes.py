@@ -75,11 +75,13 @@ def crawl_site(options: CrawlOptions):
             )
             report_path = report.generate_pdf()
 
+            print(f"[DEBUG] Generated report path: {report_path}")
+            print(f"[DEBUG] Report file exists: {os.path.isfile(report_path)}")
+
             if not os.path.isfile(report_path):
                 raise HTTPException(status_code=500, detail="Report generation failed.")
 
-            # Return the URL to download the PDF
-            return {
+            response = {
                 "message": "Crawl completed",
                 "total_urls": len(crawl_results["visited_urls"]),
                 "report_generated": True,
@@ -87,6 +89,8 @@ def crawl_site(options: CrawlOptions):
                 "dirsearch_results": dirsearch_results,
                 "sublist3r_results": sublist3r_results
             }
+            print(f"[DEBUG] Response to frontend: {response}")
+            return response
 
         return {
             "message": "Crawl completed",
