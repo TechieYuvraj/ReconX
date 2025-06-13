@@ -1,3 +1,7 @@
+## Note...
+
+Clone this tool on your local machine to use it without any limitaions for features and computations power. 
+
 # ReconX
 
 ReconX is an ethical hacking web reconnaissance tool designed to perform comprehensive web crawling and reconnaissance tasks. It provides multiple interfaces including a command-line interface (CLI), a graphical user interface (GUI), and a web API.
