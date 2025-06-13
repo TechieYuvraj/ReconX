@@ -19,6 +19,37 @@ h1 {
   margin-bottom: 20px;
 }
 
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #161b22;
+  justify-content: center;
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+
+}
+
+.navbar h2 {
+  color: #58a6ff;
+  text-align: -webkit-center;
+
+}
+
+a {
+  color: #797bf8;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.navbar2 {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 15px;
+}
+
 label {
   display: block;
   margin-top: 10px;

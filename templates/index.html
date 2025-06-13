@@ -16,11 +16,23 @@
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
+  <header class="navbar">
+    <nav class="navbar1">
+      <h2>ReconX - Developed by Yuvraj</h2>
+      <ul class="navbar2">
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
   <div class="container">
     <h1>🔍 ReconX</h1>
     <p>- Welcome to ReconX, your go-to tool for web reconnaissance. Enter a target URL and select the options you want to enable for scanning.</p>
     <p>- ReconX is designed to help security professionals and enthusiasts identify potential vulnerabilities and gather information about web applications.</p>
     <p>- Please use on the website you own or have permission to test. Unauthorized scanning may violate terms of service or legal regulations.</p>
+    <p>- Clone this tool to use it on your local machine without any limitations.</p>
+    <p>- <a href="https://github.com/TechieYuvraj/ReconX" target="_blank">GitHub Repository</a></p>
     <form id="scanForm">
       <label for="target_url">Target URL:</label>
       <input type="url" id="url" name="url" placeholder="https://example.com" required>

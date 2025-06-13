@@ -43,3 +43,10 @@ templates = Jinja2Templates(directory="templates")
 def get_index(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
+@app.get("/about", response_class=HTMLResponse)
+def get_about(request: Request):
+    return templates.TemplateResponse("about.html", {"request": request})
+
+@app.get("/contact", response_class=HTMLResponse)
+def get_contact(request: Request):
+    return templates.TemplateResponse("contact.html", {"request": request})
