@@ -59,7 +59,6 @@ def run_recon(
     settings = {
         "keywords": keyword_scan,
         "form_detection": form_detection,
-        "export_urls": False,
         "respect_nofollow": respect_nofollow,
         "parse_robots": parse_robots,
         "dirsearch": run_dirsearch_flag,

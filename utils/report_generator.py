@@ -61,6 +61,10 @@ class ReportGenerator:
             features.append("Subdomain Enumeration")
         if self.scan_settings.get("screenshots", False):
             features.append("Screenshot Capture")
+        if self.scan_settings.get("respect_nofollow", False):
+            features.append("Respect Nofollow")
+        if self.scan_settings.get("parse_robots", False):
+            features.append("Parse robots.txt")
         # Add more features as needed
         if features:
             for f in features:
