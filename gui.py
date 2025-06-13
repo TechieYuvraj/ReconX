@@ -12,13 +12,11 @@ class ReconXGUI:
         self.url         = tk.StringVar()
         self.keywords    = tk.BooleanVar()
         self.forms       = tk.BooleanVar()
-        self.export      = tk.BooleanVar()
         self.nofollow    = tk.BooleanVar()
         self.robots      = tk.BooleanVar()
         self.dirsearch   = tk.BooleanVar()
         self.sublist3r   = tk.BooleanVar()
         self.screenshots = tk.BooleanVar()
-        self.report      = tk.BooleanVar()
         self.threads     = tk.IntVar(value=10)
 
         self.build_ui()
@@ -31,13 +29,11 @@ class ReconXGUI:
         options = [
             ("Keyword Scanning", self.keywords),
             ("Form Detection",   self.forms),
-            ("Export URLs",      self.export),
             ("Respect 'nofollow'", self.nofollow),
             ("Parse robots.txt", self.robots),
             ("Run dirsearch",    self.dirsearch),
             ("Run sublist3r",    self.sublist3r),
-            ("Capture Screenshots", self.screenshots),
-            ("Generate PDF Report", self.report)
+            ("Capture Screenshots", self.screenshots)
         ]
 
         for i, (label, var) in enumerate(options, start=1):
@@ -63,7 +59,6 @@ class ReconXGUI:
 
         if self.keywords.get():    argv.append("--keywords")
         if self.forms.get():       argv.append("--forms")
-        if self.export.get():      argv.append("--export")
         if self.nofollow.get():    argv.append("--nofollow")
         if self.robots.get():      argv.append("--robots")
         if self.dirsearch.get():   argv.append("--dirsearch")
@@ -75,8 +70,7 @@ class ReconXGUI:
 
         # put argv where reconx.py expects it
         sys.argv = argv
-        # pass “generate report” & “screenshots” via hidden attrs
-        sys.generate_report   = self.report.get()
+        # pass “screenshots” via hidden attr
         sys.enable_screenshots = self.screenshots.get()
 
         # run scan in a background thread so GUI stays responsive
@@ -84,12 +78,26 @@ class ReconXGUI:
 
     def _run_scan(self):
         try:
-            run_reconx()
+            # Build args for run_recon function
+            from reconx import run_recon
+
+            pdf_path = run_recon(
+                url=self.url.get().strip(),
+                keyword_scan=self.keywords.get(),
+                form_detection=self.forms.get(),
+                respect_nofollow=self.nofollow.get(),
+                parse_robots=self.robots.get(),
+                run_dirsearch_flag=self.dirsearch.get(),
+                run_sublist3r_flag=self.sublist3r.get(),
+                capture_screenshots=self.screenshots.get(),
+                threads=self.threads.get()
+            )
+
         except Exception as e:
             # back to main thread to show dialog
-            self.root.after(0, lambda: messagebox.showerror("ReconX Error", str(e)))
+            self.root.after(0, lambda e=e: messagebox.showerror("ReconX Error", str(e)))
         else:
-            self.root.after(0, lambda: messagebox.showinfo("Done", "ReconX scan completed successfully."))
+            self.root.after(0, lambda: messagebox.showinfo("Done", f"ReconX scan completed successfully.\nPDF report generated at:\n{pdf_path}"))
 
 # ── Launch GUI ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
