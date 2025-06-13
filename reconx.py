@@ -42,6 +42,8 @@ def run_recon(
     )
 
     visited = crawler.start_crawling(url, session, extract_links)
+    print(f"[DEBUG] Type of visited: {type(visited)}")
+    print(f"[DEBUG] Sample of visited: {list(visited)[:5] if hasattr(visited, '__iter__') else visited}")
 
     if capture_screenshots:
         print("[*] Capturing screenshots...")
@@ -67,11 +69,29 @@ def run_recon(
         "parallel_crawling": True
     }
 
+    # Capture detailed results
+    found_keywords = getattr(crawler, 'found_keywords', [])
+    found_forms = getattr(crawler, 'found_forms', [])
+    screenshots_list = []  # You may need to track screenshot paths if available
+
+    dirsearch_results = None
+    if run_dirsearch_flag:
+        dirsearch_results = run_dirsearch(url)
+
+    sublist3r_results = None
+    if run_sublist3r_flag:
+        domain = urlparse(url).netloc
+        sublist3r_results = run_sublist3r(domain)
+
     report = ReportGenerator(
         target_url=url,
-        visited_urls=visited,
+        visited_urls=visited["visited_urls"],
         scan_settings=settings,
-        screenshots=[],  # Optional: Add screenshot paths if tracked
+        screenshots=screenshots_list,
+        found_keywords=found_keywords,
+        found_forms=found_forms,
+        dirsearch_results=dirsearch_results,
+        sublist3r_results=sublist3r_results
     )
     pdf_path = report.generate_pdf()
     return pdf_path

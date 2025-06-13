@@ -77,12 +77,15 @@ class ReportGenerator:
         pdf.set_font("Arial", 'I', 11)
         pdf.cell(0, 10, f"Total URLs Crawled: {len(self.visited_urls)}", ln=True)
         pdf.set_font("Arial", "", 11)
-        for url in list(self.visited_urls)[:50]:
-            pdf.set_text_color(0, 0, 255)  # Blue color for links
-            pdf.cell(0, 6, str(url), ln=True, link=str(url))
+        if self.visited_urls:
+            for url in list(self.visited_urls)[:50]:
+                pdf.set_text_color(0, 0, 255)  # Blue color for links
+                pdf.cell(0, 6, str(url), ln=True, link=str(url))
 
-        if len(self.visited_urls) > 50:
-            pdf.cell(0, 6, f"...and {len(self.visited_urls)-50} more URLs.", ln=True)
+            if len(self.visited_urls) > 50:
+                pdf.cell(0, 6, f"...and {len(self.visited_urls)-50} more URLs.", ln=True)
+        else:
+            pdf.cell(0, 6, "No URLs Crawled", ln=True)
 
         # Add detailed feature results
         if self.found_keywords:
