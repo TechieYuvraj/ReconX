@@ -21,13 +21,10 @@ ReconX is an ethical hacking web reconnaissance tool designed to perform compreh
 - Integration with Vunerability Scanners.
 - Integration with Phishing Scanners.
 - Integration with XSS Scanners.
-- Integration with SQL Injection Scanners.
 - Integration with Network Scanners.
 - Integration with OSINT Tools.
-- Screenshot capture of crawled pages.
 - Enhanced reporting capabilities.
 - Support for additional web crawling protocols.
-- Improved performance and scalability.
 - Enhanced user interface and user experience.
 - Integration with other security tools.
 
